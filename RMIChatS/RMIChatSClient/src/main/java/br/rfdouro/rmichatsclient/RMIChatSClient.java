@@ -3,15 +3,11 @@
  */
 package br.rfdouro.rmichatsclient;
 
-import br.rfdouro.rmichatsinterface.Cliente;
-import java.io.PrintStream;
-import java.io.Serializable;
 import java.rmi.Naming;
-import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 import javax.swing.JOptionPane;
 import br.rfdouro.rmichatsinterface.Server;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 
 /**
  *
@@ -22,11 +18,14 @@ public class RMIChatSClient {
  public static void main(String[] args) {
   try {
    String name = "RMI-ChatS";
-   //Registry registry = LocateRegistry.getRegistry("localhost", 1099);
    Server chat = (Server) Naming.lookup("rmi://localhost/" + name);
    int op = 0;
    String nome = null;
-   PrintStream ous = System.out;
+   String ip = "localhost";
+   try (final DatagramSocket socket = new DatagramSocket()) {
+    socket.connect(InetAddress.getByName("8.8.8.8"), 10002);
+    ip = socket.getLocalAddress().getHostAddress();
+   }
 
    do {
     if (nome == null) {
@@ -43,7 +42,7 @@ public class RMIChatSClient {
        nome = JOptionPane.showInputDialog("Digite o nome");
        try {
         ClientImpl cliente = new ClientImpl(nome);
-        Naming.rebind("rmi://localhost/cliente_" + nome, cliente);
+        Naming.rebind("rmi://" + ip + "/cliente_" + nome, cliente);
         chat.adicionaUsuario(nome);
        } catch (Exception ex) {
         ex.printStackTrace();
@@ -58,7 +57,7 @@ public class RMIChatSClient {
       break;
      case 0:
       chat.removeUsuario(nome);
-      Naming.unbind("rmi://localhost/cliente_" + nome);
+      Naming.unbind("rmi://" + ip + "/cliente_" + nome);
       System.exit(0);
       break;
      default:

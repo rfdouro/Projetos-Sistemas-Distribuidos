@@ -1,12 +1,9 @@
 package br.rfdouro.rmichatsserver;
 
-import java.net.MalformedURLException;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.rmi.Naming;
-import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
-import java.rmi.server.UnicastRemoteObject;
-import br.rfdouro.rmichatsinterface.Server;
 
 /**
  *
@@ -29,7 +26,14 @@ public class RMIChatSServer {
    // I don't know why we have to rebind at all.
    // However, this does set the string that you need to use in order to lookup the remote class.
    registry.rebind("RMI-ChatS", stub);*/
-   Naming.rebind("rmi://localhost/RMI-ChatS", implementation);
+
+   String ip = "localhost";
+   try (final DatagramSocket socket = new DatagramSocket()) {
+    socket.connect(InetAddress.getByName("8.8.8.8"), 10002);
+    ip = socket.getLocalAddress().getHostAddress();
+   }
+
+   Naming.rebind("rmi://" + ip + "/RMI-ChatS", implementation);
   } catch (Exception ex) {
    ex.printStackTrace();
    return;
