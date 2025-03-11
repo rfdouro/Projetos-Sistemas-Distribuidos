@@ -24,12 +24,12 @@ public interface CertidaoNascimento {
      * 
      * @param arg0
      * @return
-     *     returns java.lang.String
+     *     returns int
      */
     @WebMethod
     @WebResult(partName = "return")
-    @Action(input = "http://spec.soapservice.rfdouro.br/CertidaoNascimento/diaSemanaNascimentoRequest", output = "http://spec.soapservice.rfdouro.br/CertidaoNascimento/diaSemanaNascimentoResponse")
-    public String diaSemanaNascimento(
+    @Action(input = "http://spec.soapservice.rfdouro.br/CertidaoNascimento/calculaIdadeRequest", output = "http://spec.soapservice.rfdouro.br/CertidaoNascimento/calculaIdadeResponse")
+    public int calculaIdade(
         @WebParam(name = "arg0", partName = "arg0")
         String arg0);
 
@@ -37,12 +37,12 @@ public interface CertidaoNascimento {
      * 
      * @param arg0
      * @return
-     *     returns int
+     *     returns java.lang.String
      */
     @WebMethod
     @WebResult(partName = "return")
-    @Action(input = "http://spec.soapservice.rfdouro.br/CertidaoNascimento/calculaIdadeRequest", output = "http://spec.soapservice.rfdouro.br/CertidaoNascimento/calculaIdadeResponse")
-    public int calculaIdade(
+    @Action(input = "http://spec.soapservice.rfdouro.br/CertidaoNascimento/diaSemanaNascimentoRequest", output = "http://spec.soapservice.rfdouro.br/CertidaoNascimento/diaSemanaNascimentoResponse")
+    public String diaSemanaNascimento(
         @WebParam(name = "arg0", partName = "arg0")
         String arg0);
 
